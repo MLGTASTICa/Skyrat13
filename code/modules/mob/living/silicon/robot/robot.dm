@@ -15,7 +15,6 @@
 
 	wires = new /datum/wires/robot(src)
 	AddElement(/datum/element/empprotection, EMP_PROTECT_WIRES)
-	AddComponent(/datum/component/overlay_lighting, light_color, light_range, light_power, FALSE) //Skyrat change
 
 	robot_modules_background = new()
 	robot_modules_background.icon_state = "block"
@@ -543,7 +542,7 @@
 	return update_icons()
 
 /mob/living/silicon/robot/proc/self_destruct()
-	if(emagged)
+	if(emagged) 
 		return to_chat(usr, "<span class='notice'>Unable to execute selfdestruct sequence</span>") //skyrat addition
 	else
 		explosion(src.loc,-1,0,2)
@@ -578,8 +577,8 @@
 
 /mob/living/silicon/robot/proc/SetLockdown(state = 1)
 	// They stay locked down if their wire is cut.
-	if(emagged)
-		state = 0
+	if(emagged) 
+		state = 0 
 		to_chat(usr, "<span class='notice'>Unable to engage lockdown protocol</span>") // Skyrat addition 
 	if(wires.is_cut(WIRE_LOCKDOWN))
 		state = 1
@@ -627,21 +626,14 @@
 	update_headlamp()
 
 /mob/living/silicon/robot/proc/update_headlamp(var/turn_off = 0, var/cooldown = 100)
-	//set_light(0)
+	set_light(0)
 
-	var/datum/component/overlay_lighting/OL = GetComponent(/datum/component/overlay_lighting)
 	if(lamp_intensity && (turn_off || stat || low_power_mode))
 		to_chat(src, "<span class='danger'>Your headlamp has been deactivated.</span>")
 		lamp_intensity = 0
 		lamp_cooldown = world.time + cooldown
-		OL.turn_off()
 	else
-		//set_light(lamp_intensity)
-		if(lamp_intensity)
-			OL.set_range(lamp_intensity)
-			OL.turn_on()
-		else
-			OL.turn_off()
+		set_light(lamp_intensity)
 
 	if(lamp_button)
 		lamp_button.icon_state = "lamp[lamp_intensity]"
@@ -903,10 +895,10 @@
 	if(hud_used)
 		hud_used.update_robot_modules_display()
 
-	/*if (hasExpanded) Skyrat edit
+	if (hasExpanded)
 		resize = 0.5
 		hasExpanded = FALSE
-		update_transform()*/
+		update_transform()
 	module.transform_to(/obj/item/robot_module)
 
 	// Remove upgrades.
